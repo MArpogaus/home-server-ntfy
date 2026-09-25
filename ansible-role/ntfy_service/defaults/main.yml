@@ -1,0 +1,6 @@
+---
+ntfy_service_image: "docker.io/binwiederhier/ntfy:v2.28.0"
+
+ntfy_service_base_url: "http://127.0.0.1:8081"
+ntfy_service_password: ""
+ntfy_service_token: ""

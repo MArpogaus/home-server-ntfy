@@ -11,7 +11,7 @@ push notifications to the phone. No other service needs it.
 
 | Variable | Default | Controls |
 |---|---|---|
-| `ntfy_service_image` | see `defaults/main.yml` | The image |
+| `ntfy_service_server_image` | see `defaults/main.yml` | The image |
 | `ntfy_service_password` | required | Login of the phone, user `ntfy`, topic `alerts` |
 | `ntfy_service_token` | required | Token of the publisher, such as Alertmanager: `tk_` plus 29 lowercase letters or digits |
 | `ntfy_service_base_url` | `http://127.0.0.1:8081` | The address that links in a notification use |

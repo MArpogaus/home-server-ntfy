@@ -20,17 +20,10 @@ The token: `echo "tk_$(openssl rand -hex 15 | cut -c1-29)"`.
 
 ## Alerts from home-server-monitoring
 
-Alertmanager posts to one generic webhook. To point it at ntfy, set in the
-inventory:
-
-```yaml
-monitoring_service_alert_webhook_url: "http://169.254.1.3:8081/alerts?template=alertmanager"
-monitoring_service_alert_webhook_token: "{{ ntfy_service_token }}"
-```
-
-`169.254.1.3` is the host loopback as the monitoring pod sees it.
-`?template=alertmanager` selects `quadlets/configs/templates/alertmanager.yml`.
-It makes the alert name the title and the summary and the description the
+While ntfy is in `base_setup_services`, the inventory of `home-server` points
+Alertmanager's webhook at `/alerts?template=alertmanager` with
+`ntfy_service_token`. The template, `quadlets/configs/templates/alertmanager.yml`,
+makes the alert name the title and the summary and the description the
 message, and it maps the severity to a priority:
 
 | Severity | ntfy priority |
@@ -47,6 +40,10 @@ message, and it maps the severity to a priority:
 - Every start syncs the phone's user and the publisher's token into
   `data/user.db`. Anonymous clients can neither read nor publish.
 - The message cache keeps 72 hours, in `data/cache.db`.
+
+## Role contract
+
+The contract is in `home-server-template/README.md`.
 
 ## LLM coding tools
 

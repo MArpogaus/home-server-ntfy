@@ -1,4 +1,4 @@
 [Pod]
 PodName=ntfy
 # Loopback only. Other pods reach it through their pasta options.
-PublishPort=127.0.0.1:8081:8081
+PublishPort=127.0.0.1:{{ service_port }}:{{ service_port }}

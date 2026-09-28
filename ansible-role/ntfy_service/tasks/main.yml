@@ -1,14 +1,4 @@
 ---
-- name: Assert the ntfy credentials are set
-  ansible.builtin.assert:
-    that:
-      - ntfy_service_password | length > 0
-      - ntfy_service_token is match('^tk_[a-z0-9]{29}$')
-    fail_msg: >-
-      Set ntfy_service_password and ntfy_service_token (tk_ plus 29 lowercase
-      letters or digits). home-server-ntfy/README.md, "Configuration".
-    quiet: true
-
 - name: Ensure the data directory exists
   ansible.builtin.file:
     path: "{{ service_home }}/data"

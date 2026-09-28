@@ -1,17 +1,20 @@
 [Container]
 Image={{ ntfy_service_server_image }}
 ContainerName=ntfy-server
-Environment=NTFY_LISTEN_HTTP=:8081
+EnvironmentFile=./configs/ntfy.env
+# Environment= wins over the file, so the port, the paths and the access rules stay the role's.
+Environment=NTFY_LISTEN_HTTP=:{{ service_port }}
 Environment=NTFY_BASE_URL={{ ntfy_service_base_url }}
-Environment=NTFY_BEHIND_PROXY=true
 Environment=NTFY_CACHE_FILE=/var/lib/ntfy/cache.db
-Environment=NTFY_CACHE_DURATION=72h
-EnvironmentFile=./configs/auth.env
+Environment=NTFY_AUTH_FILE=/var/lib/ntfy/user.db
+Environment=NTFY_AUTH_DEFAULT_ACCESS=deny-all
+Environment=NTFY_AUTH_ACCESS=ntfy:alerts:rw
+Secret=ntfy_service_auth_users,type=env,target=NTFY_AUTH_USERS
+Secret=ntfy_service_auth_tokens,type=env,target=NTFY_AUTH_TOKENS
 Volume={{ service_home }}/data:/var/lib/ntfy:Z
 Volume=./configs/templates/:/etc/ntfy/templates/:ro,Z
 Exec=serve
-Memory=128M
-HealthCmd=wget -qO /dev/null http://127.0.0.1:8081/v1/health
+HealthCmd=wget -qO /dev/null http://127.0.0.1:{{ service_port }}/v1/health
 HealthInterval=60s
 HealthStartPeriod=30s
 HealthOnFailure=kill

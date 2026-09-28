@@ -1,6 +1,14 @@
 ---
 ntfy_service_server_image: "docker.io/binwiederhier/ntfy:v2.28.0"
 
-ntfy_service_base_url: "http://127.0.0.1:8081"
+# Required.
 ntfy_service_password: ""
 ntfy_service_token: ""
+
+# Empty: no public hostname; links in a notification point at the loopback port.
+ntfy_service_hostname: ""
+
+# ntfy's environment, merged over ntfy_service_config_defaults in vars/main.yml.
+ntfy_service_config: {}
+# Memory ceilings per container, merged over ntfy_service_memory_defaults.
+ntfy_service_memory: {}

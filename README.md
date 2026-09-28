@@ -49,7 +49,7 @@ message, and it maps the severity to a priority:
 - Every start syncs the phone's user and the publisher's token into
   `data/user.db`. `NTFY_AUTH_DEFAULT_ACCESS=deny-all` is the only gate of the
   public site: anonymous clients can neither read nor publish.
-- The message cache keeps 72 hours, in `data/cache.db`.
+- By default, the message cache keeps 72 hours, in `data/cache.db`.
 
 ## Role contract
 

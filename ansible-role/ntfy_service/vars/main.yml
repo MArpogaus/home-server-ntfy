@@ -1,3 +1,22 @@
 ---
-quadlet_service_config_modes:
-  auth.env: '0600'
+ntfy_service_base_url: >-
+  {{ ('https://' ~ ntfy_service_hostname) if ntfy_service_hostname | length > 0
+     else ('http://127.0.0.1:' ~ service_port) }}
+
+ntfy_service_config_defaults:
+  NTFY_BEHIND_PROXY: true
+  NTFY_CACHE_DURATION: 72h
+
+ntfy_service_memory_defaults:
+  server: 128M
+
+quadlet_service_required:
+  service_port: '^[0-9]+$'
+  ntfy_service_password:
+  ntfy_service_token: '^tk_[a-z0-9]{29}$'
+# The salt comes from the token, so the hash and the secret stay the same between runs.
+quadlet_service_secrets:
+  ntfy_service_auth_users: >-
+    ntfy:{{ ntfy_service_password | password_hash('bcrypt', salt=(ntfy_service_token | hash('sha256'))[:22], ident='2b') }}:user
+  ntfy_service_auth_tokens: "ntfy:{{ ntfy_service_token }}:alertmanager"
+quadlet_service_memory: "{{ ntfy_service_memory_defaults | combine(ntfy_service_memory) }}"

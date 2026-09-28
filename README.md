@@ -3,18 +3,27 @@
 ntfy in a rootless Podman pod, with an Ansible role that deploys it. ntfy sends
 push notifications to the phone. No other service needs it.
 
-| Container | Job | Memory ceiling |
+| Container | Job | Default memory ceiling |
 |---|---|---|
-| ntfy-server | Push notifications on `127.0.0.1:8081` | 128M |
+| ntfy-server | Push notifications on the loopback port | 128M |
 
 ## Configuration
 
+The service follows the configuration interface in
+`home-server-template/README.md`, "Configuration interface".
+
 | Variable | Default | Controls |
 |---|---|---|
-| `ntfy_service_server_image` | see `defaults/main.yml` | The image |
 | `ntfy_service_password` | required | Login of the phone, user `ntfy`, topic `alerts` |
 | `ntfy_service_token` | required | Token of the publisher, such as Alertmanager: `tk_` plus 29 lowercase letters or digits |
-| `ntfy_service_base_url` | `http://127.0.0.1:8081` | The address that links in a notification use |
+| `ntfy_service_hostname` | empty | The public hostname; links in a notification use it, or the loopback port without it |
+| `ntfy_service_config` | `{}` | ntfy's environment (`NTFY_*`), merged over `ntfy_service_config_defaults` |
+| `ntfy_service_memory` | `{}` | Memory ceilings per container |
+| `ntfy_service_server_image` | see `defaults/main.yml` | The image |
+
+The role keeps the listen port, the base URL, the database paths and the
+access rules; the config cannot change them. The user and the token reach ntfy
+as Podman secrets.
 
 The token: `echo "tk_$(openssl rand -hex 15 | cut -c1-29)"`.
 
@@ -38,7 +47,8 @@ message, and it maps the severity to a priority:
   internet when the inventory adds its site; ntfy does not work under a
   subpath, so it needs a hostname of its own.
 - Every start syncs the phone's user and the publisher's token into
-  `data/user.db`. Anonymous clients can neither read nor publish.
+  `data/user.db`. `NTFY_AUTH_DEFAULT_ACCESS=deny-all` is the only gate of the
+  public site: anonymous clients can neither read nor publish.
 - The message cache keeps 72 hours, in `data/cache.db`.
 
 ## Role contract

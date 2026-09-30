@@ -44,7 +44,7 @@ message, and it maps the severity to a priority:
 ## Specifics
 
 - The pod publishes only on the host loopback. The proxy puts it on the
-  internet when the inventory adds its site; ntfy does not work under a
+  internet when the inventory adds its site. ntfy does not work under a
   subpath, so it needs a hostname of its own.
 - Every start syncs the phone's user and the publisher's token into
   `data/user.db`. `NTFY_AUTH_DEFAULT_ACCESS=deny-all` is the only gate of the
@@ -57,10 +57,9 @@ The contract is in `home-server-template/README.md`.
 
 ## LLM coding tools
 
-This project is developed with LLM-based coding tools. They write most of the
-code and documentation. The maintainer sets the goals and the design, reviews
-every change and is responsible for it. Changes are tested on a VM before they
-reach a host.
+LLM-based coding tools write most of the code and documentation of this
+project. The maintainer sets the goals and the design, reviews every change and
+is responsible for it. Each change runs on a VM before it reaches a host.
 
 ## License
 

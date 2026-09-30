@@ -14,7 +14,7 @@ The service follows the configuration interface in
 
 | Variable | Default | Controls |
 |---|---|---|
-| `ntfy_service_password` | required | Login of the phone, user `ntfy`, topics `alerts` and `agent` |
+| `ntfy_service_password` | required | Login of the phone, user `ntfy`: topic `alerts`, and `agent` with an agent token |
 | `ntfy_service_token` | required | Token of Alertmanager, user `alertmanager`, which may only publish to `alerts`: `tk_` plus 29 lowercase letters or digits |
 | `ntfy_service_agent_token` | empty | Token of a coding agent, user `agent`, which reads and publishes on `agent` only; empty: no user `agent` |
 | `ntfy_service_hostname` | empty | The public hostname; links in a notification use it, or the loopback port without it |

@@ -44,7 +44,7 @@ message, and it maps the severity to a priority:
 ## Specifics
 
 - The pod publishes only on the host loopback. The proxy puts it on the
-  internet when the inventory adds its site; ntfy does not work under a
+  internet when the inventory adds its site. ntfy does not work under a
   subpath, so it needs a hostname of its own.
 - Every start syncs the phone's user and the publisher's token into
   `data/user.db`. `NTFY_AUTH_DEFAULT_ACCESS=deny-all` is the only gate of the

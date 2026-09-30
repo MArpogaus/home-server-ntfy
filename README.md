@@ -16,15 +16,15 @@ The service follows the configuration interface in
 |---|---|---|
 | `ntfy_service_password` | required | Login of the phone, user `ntfy`, topics `alerts` and `agent` |
 | `ntfy_service_token` | required | Token of Alertmanager, user `alertmanager`, which may only publish to `alerts`: `tk_` plus 29 lowercase letters or digits |
-| `ntfy_service_agent_token` | empty | Token of a coding agent, user `agent`, which reads and publishes on `agent` only; empty: no such topic |
+| `ntfy_service_agent_token` | empty | Token of a coding agent, user `agent`, which reads and publishes on `agent` only; empty: no user `agent` |
 | `ntfy_service_hostname` | empty | The public hostname; links in a notification use it, or the loopback port without it |
 | `ntfy_service_config` | `{}` | ntfy's environment (`NTFY_*`), merged over `ntfy_service_config_defaults` |
 | `ntfy_service_memory` | `{}` | Memory ceilings per container |
 | `ntfy_service_server_image` | see `defaults/main.yml` | The image |
 
 The role keeps the listen port, the base URL, the database paths and the
-access rules; the config cannot change them. The user and the token reach ntfy
-as Podman secrets.
+access rules; the config cannot change them. The users and the tokens reach
+ntfy as Podman secrets.
 
 A token: `echo "tk_$(openssl rand -hex 15 | cut -c1-29)"`.
 

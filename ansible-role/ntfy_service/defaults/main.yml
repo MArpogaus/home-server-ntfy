@@ -5,6 +5,9 @@ ntfy_service_server_image: "docker.io/binwiederhier/ntfy:v2.28.0"
 ntfy_service_password: ""
 ntfy_service_token: ""
 
+# Empty: no topic `agent`.
+ntfy_service_agent_token: ""
+
 # Empty: no public hostname; links in a notification point at the loopback port.
 ntfy_service_hostname: ""
 

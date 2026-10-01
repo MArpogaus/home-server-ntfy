@@ -10,27 +10,17 @@ ntfy_service_config_defaults:
 ntfy_service_memory_defaults:
   server: 128M
 
-# Each user with its password and token. A token user logs in with its token
-# as the password, which grants nothing the token does not.
-ntfy_service_users: >-
-  {{ [{'name': 'ntfy', 'password': ntfy_service_password, 'salt': ntfy_service_token},
-      {'name': 'alertmanager', 'password': ntfy_service_token, 'token': ntfy_service_token}]
-     + ([{'name': 'agent', 'password': ntfy_service_agent_token, 'token': ntfy_service_agent_token}]
-        if ntfy_service_agent_token | length > 0 else []) }}
 ntfy_service_access: >-
-  {{ ['ntfy:alerts:rw', 'alertmanager:alerts:wo']
-     + (['ntfy:agent*:rw', 'agent:agent*:rw'] if ntfy_service_agent_token | length > 0 else []) }}
+  {% for name, user in ntfy_service_users.items() %}{% for topic, right in
+  (user.access | default({})).items() %}{{ name }}:{{ topic }}:{{ right }},{% endfor %}{% endfor %}
 
 quadlet_service_required:
   service_port: '^[0-9]+$'
-  ntfy_service_password:
-  ntfy_service_token: '^tk_[a-z0-9]{29}$'
-  ntfy_service_agent_token: '^(tk_[a-z0-9]{29})?$'
-# The salt comes from a token, so the hash and the secret stay the same between runs.
+# A salt from the name keeps the hash the same between runs.
 quadlet_service_secrets:
   ntfy_service_auth_users: >-
-    {% for u in ntfy_service_users %}{{ u.name }}:{{ u.password | password_hash('bcrypt',
-    salt=((u.salt | default(u.token)) | hash('sha256'))[:22], ident='2b') }}:user{{ '' if loop.last else ',' }}{% endfor %}
+    {% for name, user in ntfy_service_users.items() %}{% set secret = user.password | default(user.token) %}{{ name }}:{{ secret | password_hash('bcrypt',
+    salt=(name | hash('sha256'))[:22], ident='2b') }}:user{{ '' if loop.last else ',' }}{% endfor %}
   ntfy_service_auth_tokens: >-
-    {% for u in ntfy_service_users if u.token is defined %}{{ u.name }}:{{ u.token }}:{{ u.name }}{{ '' if loop.last else ',' }}{% endfor %}
+    {% for name, user in ntfy_service_users.items() if user.token is defined %}{{ name }}:{{ user.token }}{{ '' if loop.last else ',' }}{% endfor %}
 quadlet_service_memory: "{{ ntfy_service_memory_defaults | combine(ntfy_service_memory) }}"

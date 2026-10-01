@@ -8,9 +8,13 @@ Environment=NTFY_BASE_URL={{ ntfy_service_base_url }}
 Environment=NTFY_CACHE_FILE=/var/lib/ntfy/cache.db
 Environment=NTFY_AUTH_FILE=/var/lib/ntfy/user.db
 Environment=NTFY_AUTH_DEFAULT_ACCESS=deny-all
-Environment=NTFY_AUTH_ACCESS={{ ntfy_service_access | join(",") }}
+{% if ntfy_service_access %}
+Environment=NTFY_AUTH_ACCESS={{ ntfy_service_access | trim(',') }}
+{% endif %}
 Secret=ntfy_service_auth_users,type=env,target=NTFY_AUTH_USERS
+{% if quadlet_service_secrets.ntfy_service_auth_tokens %}
 Secret=ntfy_service_auth_tokens,type=env,target=NTFY_AUTH_TOKENS
+{% endif %}
 Volume={{ service_home }}/data:/var/lib/ntfy:Z
 Volume=./configs/templates/:/etc/ntfy/templates/:ro,Z
 Exec=serve

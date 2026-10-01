@@ -1,12 +1,9 @@
 ---
 ntfy_service_server_image: "docker.io/binwiederhier/ntfy:v2.28.0"
 
-# Required.
-ntfy_service_password: ""
-ntfy_service_token: ""
-
-# Empty: no user `agent`.
-ntfy_service_agent_token: ""
+# Required. Each user by name: a password, a token or both, and its access by
+# topic pattern (rw, ro, wo or deny). README.md, "Configuration".
+ntfy_service_users: {}
 
 # Empty: no public hostname; links in a notification point at the loopback port.
 ntfy_service_hostname: ""

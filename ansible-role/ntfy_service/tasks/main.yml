@@ -1,4 +1,27 @@
 ---
+- name: Assert there is a user
+  ansible.builtin.assert:
+    that: ntfy_service_users | length > 0
+    fail_msg: ntfy_service_users needs at least one user.
+    quiet: true
+
+# ntfy checks the access rules itself, takes everyone as anonymous, and logs a
+# bad user or token line in full. The loop holds only the names, so no secret
+# reaches the output.
+- name: Assert each user has a secret
+  ansible.builtin.assert:
+    that:
+      - item != 'everyone'
+      - item is match('^[-_.+@A-Za-z0-9]+$')
+      - ntfy_service_users[item].password is defined or ntfy_service_users[item].token is defined
+      - ntfy_service_users[item].password | default('x') is truthy
+      - ntfy_service_users[item].token | default('tk_' ~ 'x' * 29) is match('^tk_[-_A-Za-z0-9]{29}$')
+    fail_msg: >-
+      The ntfy user {{ item }} needs a password or a token, none of them empty, and a name of letters, digits, -, _, ., + or @ other than everyone.
+      A token is tk_ plus 29 letters, digits, - or _.
+    quiet: true
+  loop: "{{ ntfy_service_users | list }}"
+
 - name: Ensure the data directory exists
   become: true
   become_user: "{{ service_name }}"

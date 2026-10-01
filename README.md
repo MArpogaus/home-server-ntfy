@@ -14,25 +14,38 @@ The service follows the configuration interface in
 
 | Variable | Default | Controls |
 |---|---|---|
-| `ntfy_service_password` | required | Login of the phone, user `ntfy`: topic `alerts`, and the `agent*` topics while `ntfy_service_agent_token` is set |
-| `ntfy_service_token` | required | Token of Alertmanager, user `alertmanager`, which may only publish to `alerts`: `tk_` plus 29 lowercase letters or digits |
-| `ntfy_service_agent_token` | empty | Token of the coding agents, user `agent`, which reads and publishes on the topics `agent` and `agent-<name>` only; empty: no user `agent` |
+| `ntfy_service_users` | required | The users by name, each with a `password`, a `token` or both, and its `access`: topic pattern to `rw`, `ro`, `wo` or `deny` |
 | `ntfy_service_hostname` | empty | The public hostname; links in a notification use it, or the loopback port without it |
 | `ntfy_service_config` | `{}` | ntfy's environment (`NTFY_*`), merged over `ntfy_service_config_defaults` |
 | `ntfy_service_memory` | `{}` | Memory ceilings per container |
 | `ntfy_service_server_image` | see `defaults/main.yml` | The image |
 
 The role keeps the listen port, the base URL, the database paths and the
-access rules; the config cannot change them. The users and the tokens reach
-ntfy as Podman secrets.
+default access `deny-all`. While a user has access, it also keeps the access
+rules. The config cannot change them. The users and the tokens reach ntfy as
+Podman secrets.
 
-A token: `echo "tk_$(openssl rand -hex 15 | cut -c1-29)"`.
+```yaml
+ntfy_service_users:
+  ntfy:                        # the phone
+    password: "..."
+    access: {alerts: rw, "agent*": rw}
+  alertmanager:
+    token: tk_...
+    access: {alerts: wo}
+  agent:                       # coding agents, one topic each: agent-<name>
+    token: tk_...
+    access: {"agent*": rw}
+```
+
+Make a token with `echo "tk_$(openssl rand -hex 15 | cut -c1-29)"`. A token user without a
+password logs in with its token as the password.
 
 ## Alerts from home-server-monitoring
 
 While ntfy is in `base_setup_services`, the inventory of `home-server` points
-Alertmanager's webhook at `/alerts?template=alertmanager` with
-`ntfy_service_token`. The template, `quadlets/configs/templates/alertmanager.yml`,
+Alertmanager's webhook at `/alerts?template=alertmanager` with the token of
+the user `alertmanager`. The template, `quadlets/configs/templates/alertmanager.yml`,
 makes the alert name the title and the summary and the description the
 message, and it maps the severity to a priority:
 
@@ -50,6 +63,11 @@ message, and it maps the severity to a priority:
 - Every start syncs the users, their tokens and their access into
   `data/user.db`. `NTFY_AUTH_DEFAULT_ACCESS=deny-all` is the only gate of the
   public site: anonymous clients can neither read nor publish.
+- A leaked password or token can make more tokens through the API, and a new
+  secret does not revoke them. To revoke a leak, rename the user in
+  `ntfy_service_users`: ntfy then drops the old user with all its tokens. A
+  renamed `alertmanager` needs the new name in the inventory's
+  `monitoring_service_alert_webhook_token`.
 - By default, the message cache keeps 72 hours, in `data/cache.db`.
 
 ## Role contract

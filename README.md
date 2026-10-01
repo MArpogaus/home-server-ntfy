@@ -14,9 +14,9 @@ The service follows the configuration interface in
 
 | Variable | Default | Controls |
 |---|---|---|
-| `ntfy_service_password` | required | Login of the phone, user `ntfy`: topic `alerts`, and `agent` while `ntfy_service_agent_token` is set |
+| `ntfy_service_password` | required | Login of the phone, user `ntfy`: topic `alerts`, and the `agent*` topics while `ntfy_service_agent_token` is set |
 | `ntfy_service_token` | required | Token of Alertmanager, user `alertmanager`, which may only publish to `alerts`: `tk_` plus 29 lowercase letters or digits |
-| `ntfy_service_agent_token` | empty | Token of a coding agent, user `agent`, which reads and publishes on `agent` only; empty: no user `agent` |
+| `ntfy_service_agent_token` | empty | Token of the coding agents, user `agent`, which reads and publishes on the topics `agent` and `agent-<name>` only; empty: no user `agent` |
 | `ntfy_service_hostname` | empty | The public hostname; links in a notification use it, or the loopback port without it |
 | `ntfy_service_config` | `{}` | ntfy's environment (`NTFY_*`), merged over `ntfy_service_config_defaults` |
 | `ntfy_service_memory` | `{}` | Memory ceilings per container |

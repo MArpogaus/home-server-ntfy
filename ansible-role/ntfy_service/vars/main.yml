@@ -19,7 +19,7 @@ ntfy_service_users: >-
         if ntfy_service_agent_token | length > 0 else []) }}
 ntfy_service_access: >-
   {{ ['ntfy:alerts:rw', 'alertmanager:alerts:wo']
-     + (['ntfy:agent:rw', 'agent:agent:rw'] if ntfy_service_agent_token | length > 0 else []) }}
+     + (['ntfy:agent*:rw', 'agent:agent*:rw'] if ntfy_service_agent_token | length > 0 else []) }}
 
 quadlet_service_required:
   service_port: '^[0-9]+$'

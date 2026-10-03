@@ -43,7 +43,7 @@ password logs in with its token as the password.
 
 ## Alerts from home-server-monitoring
 
-While ntfy is in `base_setup_services`, the inventory of `home-server` points
+While ntfy is in `base_setup_services`, the deployment directory points
 Alertmanager's webhook at `/alerts?template=alertmanager` with the token of
 the user `alertmanager`. The template, `quadlets/configs/templates/alertmanager.yml`,
 makes the alert name the title and the summary and the description the
@@ -58,7 +58,7 @@ message, and it maps the severity to a priority:
 ## Specifics
 
 - The pod publishes only on the host loopback. The proxy puts it on the
-  internet when the inventory adds its site. ntfy does not work under a
+  internet when the deployment directory adds its site. ntfy does not work under a
   subpath, so it needs a hostname of its own.
 - Every start syncs the users, their tokens and their access into
   `data/user.db`. `NTFY_AUTH_DEFAULT_ACCESS=deny-all` is the only gate of the
@@ -66,7 +66,7 @@ message, and it maps the severity to a priority:
 - A leaked password or token can make more tokens through the API, and a new
   secret does not revoke them. To revoke a leak, rename the user in
   `ntfy_service_users`: ntfy then drops the old user with all its tokens. A
-  renamed `alertmanager` needs the new name in the inventory's
+  renamed `alertmanager` needs the new name in the deployment directory's
   `monitoring_service_alert_webhook_token`.
 - By default, the message cache keeps 72 hours, in `data/cache.db`.
 

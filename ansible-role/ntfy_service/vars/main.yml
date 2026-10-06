@@ -17,7 +17,6 @@ ntfy_service_access: >-
 
 quadlet_service_required:
   service_port: '^[0-9]+$'
-# A salt from the name keeps the hash the same between runs.
 quadlet_service_secrets:
   ntfy_service_auth_users: >-
     {% for name, user in ntfy_service_users.items() %}{% set secret = user.password | default(user.token) %}{{ name }}:{{ secret | password_hash('bcrypt',

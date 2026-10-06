@@ -5,9 +5,6 @@
     fail_msg: ntfy_service_users needs at least one user.
     quiet: true
 
-# ntfy checks the access rules itself, takes everyone as anonymous, and logs a
-# bad user or token line in full. The loop holds only the names, so no secret
-# reaches the output.
 - name: Assert each user has a secret
   ansible.builtin.assert:
     that:

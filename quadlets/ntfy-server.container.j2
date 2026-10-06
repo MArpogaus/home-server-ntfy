@@ -2,7 +2,6 @@
 Image={{ ntfy_service_server_image }}
 ContainerName=ntfy-server
 EnvironmentFile=./configs/ntfy.env
-# Environment= wins over the file, so the port, the paths and the access rules stay the role's.
 Environment=NTFY_LISTEN_HTTP=:{{ service_port }}
 Environment=NTFY_BASE_URL={{ ntfy_service_base_url }}
 Environment=NTFY_CACHE_FILE=/var/lib/ntfy/cache.db

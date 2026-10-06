@@ -1,14 +1,10 @@
 ---
 ntfy_service_server_image: "docker.io/binwiederhier/ntfy:v2.28.0"
 
-# Required. Each user by name: a password, a token or both, and its access by
-# topic pattern (rw, ro, wo or deny). README.md, "Configuration".
 ntfy_service_users: {}
 
-# Empty: no public hostname; links in a notification point at the loopback port.
 ntfy_service_hostname: ""
 
-# ntfy's environment, merged over ntfy_service_config_defaults in vars/main.yml.
 ntfy_service_config: {}
-# Memory ceilings per container, merged over ntfy_service_memory_defaults.
 ntfy_service_memory: {}
+ntfy_service_cpu: {}

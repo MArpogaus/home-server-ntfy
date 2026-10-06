@@ -12,3 +12,4 @@ ntfy_service_hostname: ""
 ntfy_service_config: {}
 # Memory ceilings per container, merged over ntfy_service_memory_defaults.
 ntfy_service_memory: {}
+ntfy_service_cpu: {}

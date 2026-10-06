@@ -9,6 +9,7 @@ ntfy_service_config_defaults:
 
 ntfy_service_memory_defaults:
   server: 128M
+ntfy_service_cpu_defaults: {}
 
 ntfy_service_access: >-
   {% for name, user in ntfy_service_users.items() %}{% for topic, right in
@@ -24,3 +25,4 @@ quadlet_service_secrets:
   ntfy_service_auth_tokens: >-
     {% for name, user in ntfy_service_users.items() if user.token is defined %}{{ name }}:{{ user.token }}{{ '' if loop.last else ',' }}{% endfor %}
 quadlet_service_memory: "{{ ntfy_service_memory_defaults | combine(ntfy_service_memory) }}"
+quadlet_service_cpu: "{{ ntfy_service_cpu_defaults | combine(ntfy_service_cpu) }}"

@@ -18,6 +18,7 @@ The service follows the configuration interface in
 | `ntfy_service_hostname` | empty | The public hostname; links in a notification use it, or the loopback port without it |
 | `ntfy_service_config` | `{}` | ntfy's environment (`NTFY_*`), merged over `ntfy_service_config_defaults` |
 | `ntfy_service_memory` | `{}` | Memory ceilings per container |
+| `ntfy_service_cpu` | `{}` | CPU quotas per container, such as `{<container>: 50%}` |
 | `ntfy_service_server_image` | see `defaults/main.yml` | The image |
 
 The role keeps the listen port, the base URL, the database paths and the
